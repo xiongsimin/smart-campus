@@ -1,0 +1,25 @@
+server:
+  port: 8000
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: smart-campus-userservice
+#  devtools:
+#    restart:
+#      enabled: true
+#      additional-paths: src/main/java
+  datasource:
+    url: jdbc:mysql://localhost:3306/dbname?serverTimezone=PRC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  typeAliasesPackage: com.graduation.design.smartcampususerservice.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
