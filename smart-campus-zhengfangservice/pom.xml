@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.graduation.design</groupId>
-    <artifactId>amart-campus-zhengfangservice</artifactId>
+    <artifactId>smart-campus-zhengfangservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>amart-campus-zhengfangservice</name>
+    <name>smart-campus-zhengfangservice</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

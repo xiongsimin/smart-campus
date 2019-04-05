@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.graduation.design.smartcampususerservice.dao.UserDao">
+    <insert id="newUser" parameterType="User" keyProperty="id"
+            useGeneratedKeys="true">
+        INSERT INTO `user`(email,check_code,active_time)VALUES(#{email},#{checkCode},#{activeTime})
+    </insert>
+    <!--<update id="clearCheckCode" parameterType="String">-->
+        <!--UPDATE `user` SET check_code=NULL WHERE email=#{email}-->
+    <!--</update>-->
+    <select id="findUserByEmail" parameterType="String" resultType="User">
+        SELECT * FROM `user` WHERE email=#{email}
+    </select>
+    <update id="renewCheckCode" parameterType="User">
+        UPDATE `user` SET check_code=#{checkCode},active_time=#{activeTime} WHERE email=#{email}
+    </update>
+    <update id="setPassword" parameterType="User">
+        UPDATE `user` SET password=#{password} WHERE id=#{id}
+    </update>
+</mapper>
