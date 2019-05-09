@@ -3,6 +3,27 @@
 <mapper namespace="com.graduation.design.smartcampususerservice.dao.CampusDao">
     <insert id="addCampus" parameterType="Campus" keyProperty="id"
             useGeneratedKeys="true">
-        INSERT INTO campus(campus_name,campus_code,province,official_system_id)VALUES(#{campusName},#{campusCode},#{province},#{officialSystemId})
+        INSERT INTO campus(campus_name,campus_code,province,education_system_id,education_system_address,official_site_id)VALUES(#{campusName},#{campusCode},#{province},#{educationSystemId},#{educationSystemAddress},#{officialSiteId})
     </insert>
+    <delete id="delCampusById" parameterType="int">
+        DELETE FROM campus WHERE id=#{id}
+    </delete>
+    <select id="findCampusById" parameterType="int" resultType="Campus">
+        SELECT * FROM campus WHERE id=#{id}
+    </select>
+    <select id="findCampusByCampusName" parameterType="String" resultType="Campus">
+        SELECT * FROM campus WHERE campus_name=#{campusName}
+    </select>
+    <update id="editCampusDetail" parameterType="Campus">
+        UPDATE campus SET campus_name=#{campusName},campus_code=#{campusCode},province=#{province} WHERE id=#{id}
+    </update>
+    <update id="editCampusEducationSystemAddress">
+        UPDATE campus SET education_system_address=#{educationSystemAddress} WHERE id=#{id}
+    </update>
+    <update id="editCampusEducationSystemId">
+        UPDATE campus SET education_system_id=#{educationSystemId} WHERE id=#{id}
+    </update>
+    <select id="getAllCampus" resultType="Campus">
+        SELECT * FROM campus
+    </select>
 </mapper>

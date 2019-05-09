@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *
+ *该类暂时作废
 @RestController
 public class AcademyController {
     private final AcademyService academyService;
@@ -77,4 +80,4 @@ public class AcademyController {
         }
         return rs;
     }
-}
+}*/

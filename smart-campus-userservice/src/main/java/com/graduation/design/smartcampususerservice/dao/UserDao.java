@@ -41,4 +41,24 @@ public interface UserDao {
      * @return
      */
     int setPassword(User user);
+
+    /**
+     * 设置个人信息（昵称、性别）
+     * @return
+     */
+    int setPersonalDetail(User user);
+
+    /**
+     * 设置昵称
+     * @param user
+     * @return
+     */
+    int setNickname(User user);
+
+    /**
+     * 更新性别
+     * @param user
+     * @return
+     */
+    int setSex(User user);
 }

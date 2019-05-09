@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 public class User implements Serializable {
-    private int id;
+    private long id;
     private String nickname;
     private String sex;
     private String email;
@@ -16,12 +16,15 @@ public class User implements Serializable {
     private long userCampusId;
     private String checkCode;
     private Timestamp activeTime;
+    private String userImagePath;
+    private Campus campus;
+    private UserCampus userCampus;
 
     public User() {
         super();
     }
 
-    public User(int id, String nickname, String sex, String email, String password, String realName, String idCardNumber, int realNameOrNot, Timestamp signUpTime, long userCampusId, String checkCode, Timestamp activeTime) {
+    public User(long id, String nickname, String sex, String email, String password, String realName, String idCardNumber, int realNameOrNot, Timestamp signUpTime, long userCampusId, String checkCode, Timestamp activeTime, Campus campus, UserCampus userCampus) {
         this.id = id;
         this.nickname = nickname;
         this.sex = sex;
@@ -34,13 +37,41 @@ public class User implements Serializable {
         this.userCampusId = userCampusId;
         this.checkCode = checkCode;
         this.activeTime = activeTime;
+        this.campus = campus;
+        this.userCampus = userCampus;
     }
 
-    public int getId() {
+    public User(long id, String nickname, String sex, String email, String password, String realName, String idCardNumber, int realNameOrNot, Timestamp signUpTime, long userCampusId, String checkCode, Timestamp activeTime, String userImagePath, Campus campus, UserCampus userCampus) {
+        this.id = id;
+        this.nickname = nickname;
+        this.sex = sex;
+        this.email = email;
+        this.password = password;
+        this.realName = realName;
+        this.idCardNumber = idCardNumber;
+        this.realNameOrNot = realNameOrNot;
+        this.signUpTime = signUpTime;
+        this.userCampusId = userCampusId;
+        this.checkCode = checkCode;
+        this.activeTime = activeTime;
+        this.userImagePath = userImagePath;
+        this.campus = campus;
+        this.userCampus = userCampus;
+    }
+
+    public String getUserImagePath() {
+        return userImagePath;
+    }
+
+    public void setUserImagePath(String userImagePath) {
+        this.userImagePath = userImagePath;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -66,6 +97,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRealName() {
@@ -124,12 +163,20 @@ public class User implements Serializable {
         this.activeTime = activeTime;
     }
 
-    public String getPassword() {
-        return password;
+    public Campus getCampus() {
+        return campus;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCampus(Campus campus) {
+        this.campus = campus;
+    }
+
+    public UserCampus getUserCampus() {
+        return userCampus;
+    }
+
+    public void setUserCampus(UserCampus userCampus) {
+        this.userCampus = userCampus;
     }
 
     @Override
@@ -147,6 +194,9 @@ public class User implements Serializable {
                 ", userCampusId=" + userCampusId +
                 ", checkCode='" + checkCode + '\'' +
                 ", activeTime=" + activeTime +
+                ", userImagePath='" + userImagePath + '\'' +
+                ", campus=" + campus +
+                ", userCampus=" + userCampus +
                 '}';
     }
 }

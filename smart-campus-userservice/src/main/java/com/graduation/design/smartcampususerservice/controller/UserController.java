@@ -1,28 +1,38 @@
 package com.graduation.design.smartcampususerservice.controller;
 
-import com.graduation.design.smartcampususerservice.entity.User;
+import com.graduation.design.smartcampususerservice.entity.*;
+import com.graduation.design.smartcampususerservice.service.CampusService;
+import com.graduation.design.smartcampususerservice.service.UserCampusService;
 import com.graduation.design.smartcampususerservice.service.UserService;
 import com.graduation.design.smartcampususerservice.thread.ClearCheckCodeThread;
 import com.graduation.design.smartcampususerservice.util.EmailUtil;
 import com.graduation.design.smartcampususerservice.util.RandomCodeUtil;
 import com.graduation.design.smartcampususerservice.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 @RestController
 public class UserController {
     private final UserService userService;
+    private final UserCampusService userCampusService;
+    private final CampusService campusService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserCampusService userCampusService, CampusService campusService) {
         this.userService = userService;
+        this.userCampusService = userCampusService;
+        this.campusService = campusService;
     }
 
     /**
@@ -92,7 +102,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/register")
-    public Result signUpSecondStep(User user, Result rs) {
+    public Result signUpSecondStep(@RequestBody User user, Result rs) {
         if (user.getEmail() != null) {
             User user1 = this.userService.findUserByEmail(user.getEmail());
             if (user1 != null) {
@@ -129,7 +139,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/register")
-    public Result signUpThirdStep(User user, Result rs) {
+    public Result signUpThirdStep(@RequestBody User user, Result rs) {
         if (user.getEmail() != null) {
             User user1 = this.userService.findUserByEmail(user.getEmail());
             if (user1 != null) {
@@ -148,35 +158,107 @@ public class UserController {
         return rs;
     }
 
+    /**
+     * 登录
+     *
+     * @param user
+     * @param rs
+     * @return
+     */
     @PostMapping("/login")
-    public Result login(User user, Result rs) {
-        if(user.getEmail()!=null){
-            if(user.getPassword()!=null){
-                User user1=this.userService.findUserByEmail(user.getEmail());
-                if(user1!=null){
-                    if(user1.getPassword()!=null){
-                        if(user1.getPassword().equals(user.getPassword())){
+    public Result login(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if (user.getPassword() != null) {
+                User user1 = this.userService.findUserByEmail(user.getEmail());
+                if (user1 != null) {
+                    if (user1.getPassword() != null) {
+                        if (user1.getPassword().equals(user.getPassword())) {
                             rs.setSuccess(true);
                             rs.setMsg("登录成功！");
-                        }else {
+                        } else {
                             rs.setSuccess(false);
                             rs.setMsg("登录失败！密码错误！");
                         }
-                    }else {
+                    } else {
                         rs.setSuccess(false);
                         rs.setMsg("登录失败！请先完成注册！");
                     }
-                }else {
+                } else {
                     rs.setSuccess(false);
                     rs.setMsg("登录失败！用户不存在！请注册！");
                 }
-            }else{
+            } else {
                 rs.setSuccess(false);
                 rs.setMsg("登录失败！密码不能为空！");
             }
-        }else {
+        } else {
             rs.setSuccess(false);
             rs.setMsg("登录失败！邮箱不能为空！");
+        }
+        return rs;
+    }
+
+    /**
+     * 设置个人信息（昵称、性别、学校、教务系统学号、教务系统登录密码）
+     *
+     * @param userUserCampus
+     * @param rs
+     * @return
+     */
+    @PostMapping("/personalDetail")
+    public Result setPersonalDetail(@RequestBody UserUserCampus userUserCampus, Result rs) {
+        User user = userUserCampus.getUser();
+        UserCampus userCampus = userUserCampus.getUserCampus();
+        if (user.getEmail() != null) {
+            User user1 = this.userService.findUserByEmail(user.getEmail());
+            if (user1 != null) {
+                if (user1.getPassword() != null) {
+                    user1.setNickname(user.getNickname());
+                    user1.setSex(user.getSex());
+                    userCampus.setUserId(user1.getId());
+                    if (this.userService.setPersonalDetail(user1, userCampus) == 2) {
+                        rs.setSuccess(true);
+                        rs.setMsg("用户信息设置成功！");
+                    } else {
+                        rs.setSuccess(false);
+                        rs.setMsg("用户信息设置失败！");
+                    }
+                } else {
+                    rs.setSuccess(false);
+                    rs.setMsg("用户信息设置失败！请先完成注册！");
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("用户信息设置失败！该邮箱尚未注册！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("用户信息设置失败！邮箱不能为空！");
+        }
+        return rs;
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @param user
+     * @param rs
+     * @return
+     */
+    @GetMapping("/personalDetail")
+    public Result getPersonalDetail(User user, Result rs) {
+        if (user.getEmail() != null) {
+            user = userService.findUserByEmail(user.getEmail());
+            if (user != null) {
+                rs.setSuccess(true);
+                rs.setData(user);
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("用户信息获取失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("用户信息获取失败！邮箱不能为空！");
         }
         return rs;
     }
@@ -187,4 +269,258 @@ public class UserController {
 //        clearCheckCodeThread.init(user.getEmail());
 //        clearCheckCodeThread.run();
 //    }
+
+    /**
+     * 获取当前时间年-月-日
+     *
+     * @return
+     */
+    @GetMapping("/getDate")
+    public Result getDate(Result rs) {
+        Calendar calendar = Calendar.getInstance();
+        MyDate myDate = new MyDate();
+        myDate.setYear(calendar.get(Calendar.YEAR));
+        myDate.setMonth(calendar.get(Calendar.MONTH) + 1);
+        myDate.setDay(calendar.get(Calendar.DATE));
+        System.out.println(myDate);
+        rs.setSuccess(true);
+        rs.setData(myDate);
+        return rs;
+    }
+
+    @PutMapping("/nickname")
+    public Result setNickname(@RequestBody User user, Result rs) {
+        if (userService.setNickname(user) == 1) {
+            rs.setSuccess(true);
+            rs.setMsg("更新昵称成功！");
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("更新昵称失败！");
+        }
+        return rs;
+    }
+
+    @PutMapping("/sex")
+    public Result setSex(@RequestBody User user, Result rs) {
+        if (userService.setSex(user) == 1) {
+            rs.setSuccess(true);
+            rs.setMsg("更新性别成功！");
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("更新性别失败！");
+        }
+        return rs;
+    }
+
+    /**
+     * 新增或更新用户-学校关联记录
+     *
+     * @param user
+     * @param rs
+     * @return
+     */
+    @PostMapping("/userCampus")
+    public Result setUserCampus(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if ((userService.findUserByEmail(user.getEmail())) != null) {
+                if (userCampusService.findUserCampusByUserId(user) != null) {//已存在记录，更新
+                    UserCampus userCampus = userCampusService.findUserCampusByUserId(user);
+                    Campus campus = campusService.findCampusByCampusName(user.getCampus().getCampusName());
+                    System.out.println(campus);
+                    userCampus.setCampusId(campus.getId());
+                    if (userCampusService.updateUserCampus(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置学校成功！");
+                    } else {
+                        rs.setSuccess(false);
+                        rs.setMsg("设置学校失败！更新用户-学校关系失败！");
+                    }
+                } else {//不存在记录，新增
+                    UserCampus userCampus = new UserCampus();
+                    Campus campus = campusService.findCampusByCampusName(user.getCampus().getCampusName());
+                    userCampus.setUserId(user.getId());
+                    userCampus.setCampusId(campus.getId());
+                    if (userCampusService.addUserCampus(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置学校成功！");
+                    } else {
+                        rs.setSuccess(false);
+                        rs.setMsg("设置学校失败！新增用户-学校关系失败！");
+                    }
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("设置学校失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("设置学校失败！请求中不包含正确的用户邮箱信息！");
+        }
+        return rs;
+    }
+
+    @PutMapping("/academy")
+    public Result setAcademy(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if (userService.findUserByEmail(user.getEmail()) != null) {
+                if (userCampusService.findUserCampusByUserId(user) != null) {//中间表存在
+                    UserCampus userCampus = user.getUserCampus();
+                    userCampus.setUserId(userService.findUserByEmail(user.getEmail()).getId());
+                    if (userCampusService.setAcademy(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置成功！");
+                    }
+                } else {
+                    rs.setSuccess(false);
+                    rs.setMsg("设置学院失败！请先设置学校！");
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("设置学院失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("设置学院失败！邮箱为空！");
+        }
+        return rs;
+    }
+
+    @PutMapping("/degree")
+    public Result setDegree(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if (userService.findUserByEmail(user.getEmail()) != null) {
+                if (userCampusService.findUserCampusByUserId(user) != null) {//中间表存在
+                    UserCampus userCampus = user.getUserCampus();
+                    userCampus.setUserId(userService.findUserByEmail(user.getEmail()).getId());
+                    if (userCampusService.setDegree(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置成功！");
+                    }
+                } else {
+                    rs.setSuccess(false);
+                    rs.setMsg("设置学历失败！请先设置学校！");
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("设置学历失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("设置学历失败！邮箱为空！");
+        }
+        return rs;
+    }
+
+    @PutMapping("/major")
+    public Result setMajor(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if (userService.findUserByEmail(user.getEmail()) != null) {
+                if (userCampusService.findUserCampusByUserId(user) != null) {//中间表存在
+                    UserCampus userCampus = user.getUserCampus();
+                    userCampus.setUserId(userService.findUserByEmail(user.getEmail()).getId());
+                    if (userCampusService.setMajor(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置成功！");
+                    }
+                } else {
+                    rs.setSuccess(false);
+                    rs.setMsg("设置专业失败！请先设置学校！");
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("设置专业失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("设置专业失败！邮箱为空！");
+        }
+        return rs;
+    }
+
+    @PutMapping("/attendCampusTime")
+    public Result setAttendCampusTime(@RequestBody User user, Result rs) {
+        if (user.getEmail() != null) {
+            if (userService.findUserByEmail(user.getEmail()) != null) {
+                if (userCampusService.findUserCampusByUserId(user) != null) {//中间表存在
+                    UserCampus userCampus = user.getUserCampus();
+                    userCampus.setUserId(userService.findUserByEmail(user.getEmail()).getId());
+                    if (userCampusService.setAttendCampusTime(userCampus) == 1) {
+                        rs.setSuccess(true);
+                        rs.setMsg("设置成功！");
+                    }
+                } else {
+                    rs.setSuccess(false);
+                    rs.setMsg("设置入学时间失败！请先设置学校！");
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("设置入学时间失败！用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("设置入学时间失败！邮箱为空！");
+        }
+        return rs;
+    }
+
+    /**
+     * 设置/更新用户头像
+     *
+     * @param email
+     * @param encodeImg base64转码后的图片
+     * @param imgSuffix 原图片文件后缀
+     * @param rs
+     * @return
+     */
+    @PutMapping("/userImage")
+    public Result setUserImage(String email, String encodeImg, String imgSuffix, @RequestParam("userImage") MultipartFile multipartFile, Result rs) {
+        if (email != null) {
+            User user = userService.findUserByEmail(email);
+            if (user != null) {
+                File fileDir = new File("D:\\nginx-1.15.8\\html\\smart_campus\\user_images\\" + user.getId());
+                if (!fileDir.exists()) {
+                    fileDir.mkdir();
+                }
+                File filePath = new File("D:\\nginx-1.15.8\\html\\smart_campus\\user_images\\" + user.getId() + "\\1" + imgSuffix);//用户头像文件，如：1.jpg 1.png
+                if (!filePath.exists()) {
+                    try {
+                        filePath.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        rs.setSuccess(false);
+                        rs.setMsg("新建文件失败！");
+                        return rs;
+                    }
+                }
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream("D:\\nginx-1.15.8\\html\\smart_campus\\user_images\\" + user.getId() + "\\1" + imgSuffix, false);
+                    fos.write(multipartFile.getBytes());
+                    fos.close();
+                    rs.setSuccess(true);
+                    rs.setMsg("上传头像成功！");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    rs.setSuccess(false);
+                    rs.setMsg("写入文件失败！");
+                    return rs;
+                }
+            } else {
+                rs.setSuccess(false);
+                rs.setMsg("用户不存在！");
+            }
+        } else {
+            rs.setSuccess(false);
+            rs.setMsg("邮箱不能为空！");
+        }
+        return rs;
+    }
+    /*public static void main(String[] args){
+        Calendar calendar = Calendar.getInstance();
+        MyDate myDate=new MyDate();
+        myDate.setYear(calendar.get(Calendar.YEAR));
+        myDate.setMonth(calendar.get(Calendar.MONTH+1));
+        myDate.setDay(calendar.get(Calendar.DATE));
+        System.out.println(myDate);
+    }*/
 }

@@ -17,4 +17,13 @@
     <update id="setPassword" parameterType="User">
         UPDATE `user` SET password=#{password} WHERE id=#{id}
     </update>
+    <update id="setPersonalDetail" parameterType="User">
+        UPDATE `user` SET nickname=#{nickname},sex=#{sex},user_campus_id=#{userCampusId} WHERE id=#{id}
+    </update>
+    <update id="setNickname" parameterType="User">
+        UPDATE `user` SET nickname=#{nickname} WHERE email=#{email}
+    </update>
+    <update id="setSex" parameterType="User">
+        UPDATE `user` SET sex=#{sex} WHERE email=#{email}
+    </update>
 </mapper>

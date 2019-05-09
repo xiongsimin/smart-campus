@@ -14,15 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ZhengFangUtil<main> {
+public class ZhengFangUtil {
     private String url;
     private Map<String, String> Cookie;//存储当前学生模拟访问时的cookie
     private byte[] checkCodeBytes;//验证码图片的字节数组
     private String UserAgent;//请求头参数UserAgent
     private int timeout;//访问时超时时间
     private String __VIEWSTATE;//从登录页获取的__VIEWSTATE，用于登录时的参数
-    private String __VIEWSTATE1;//
-    private String __VIEWSTATE2;//
+    private String __VIEWSTATE1;//默认个人课表页参数
+    private String __VIEWSTATE2;//默认成绩页参数
+    private String __VIEWSTATE3;//默认考试信息页参数
     private Document document;//
     private String stuId;
     private String stuPwd;
@@ -35,6 +36,7 @@ public class ZhengFangUtil<main> {
     private String birthday;//出生日期
     private Document personalClassSchedule;//个人课表（按学期查）
     private Document personalGrade;//成绩（按学期查）
+    private Document examInfo;//考试信息
 
     /**
      * 初始化
@@ -61,6 +63,8 @@ public class ZhengFangUtil<main> {
                     this.__VIEWSTATE1 = el.val();
                 else if (i == 2) {
                     this.__VIEWSTATE2 = el.val();
+                } else if (i == 3) {
+                    this.__VIEWSTATE3 = el.val();
                 }
                 break;
             }
@@ -233,7 +237,7 @@ public class ZhengFangUtil<main> {
         data.put("__VIEWSTATE", this.__VIEWSTATE1);
         data.put("xnd", xnd);
         data.put("xqd", xqd);
-        Connection connection = Jsoup.connect(this.major + "/xskbcx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121603");
+        Connection connection = Jsoup.connect(this.url + "/xskbcx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121603");
         try {
             Connection.Response response = connection.method(Connection.Method.POST).ignoreContentType(true).header("Referer", Referer).cookies(this.Cookie).data(data).timeout(this.timeout).execute();
             //根据学年和学期查课表【暂时未做数据清洗】
@@ -265,7 +269,7 @@ public class ZhengFangUtil<main> {
     }
 
     /**
-     * 获取成绩第二部，根据学年和学期获取成绩
+     * 获取成绩第二步，根据学年和学期获取成绩
      *
      * @param ddlXN 学年 eg:2018-2019
      * @param ddlXQ 学期 eg:1
@@ -291,11 +295,51 @@ public class ZhengFangUtil<main> {
         }
     }
 
-    public void printf() {
-        System.out.println(this.sex + this.stuName + this.academy + this.major);
+    /**
+     * 获取默认学期考试信息，并获取该页参数__VIEWSTATE3，为下一步操作使用//
+     *
+     * @return
+     */
+    public boolean getDefaultExamInfo() {
+        String Referer = this.url + "/xs_main.aspx?xh=" + this.stuId;
+        Connection connection = Jsoup.connect(this.url + "/xskscx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121604");
+        try {
+            Connection.Response response = connection.method(Connection.Method.GET).ignoreContentType(true).cookies(this.Cookie).header("Referer", Referer).timeout(this.timeout).execute();
+            this.document = Jsoup.parse(response.body());
+            get__VIEWSTATE(3);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    //http://202.206.243.3/xskscx.aspx?xh=150104010145&xm=%D0%DC%CB%BC%C3%F4&gnmkdm=N121604
+    public boolean getExamInfo(String xnd,String xqd){
+        String subUrl = "/xskscx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121604";
+        String Referer = this.url + "/xskscx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121604";
+        Map<String, String> data = new HashMap<>();
+        data.put("__VIEWSTATE", this.__VIEWSTATE3);
+        data.put("__EVENTARGUMENT", "");
+        data.put("xnd", xnd);
+        data.put("xqd", xqd);
+        data.put("__EVENTTARGET", "xnd");
+        Connection connection = Jsoup.connect(this.url + subUrl);
+        try {
+            Connection.Response response = connection.method(Connection.Method.POST).ignoreContentType(true).cookies(this.Cookie).header("Referer", Referer).data(data).timeout(this.timeout).execute();
+            //根据学年和学期查成绩【暂时未做数据清洗】
+            this.examInfo = Jsoup.parse(response.body());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-//    /**
+    public void printf() {
+        System.out.println(this.examInfo);
+    }
+
+    //    /**
 //     * 封装获取个人详细信息操作
 //     *
 //     * @return
@@ -321,8 +365,8 @@ public class ZhengFangUtil<main> {
 //        }
 //        return true;
 //    }
-
     public static void main(String[] args) {
+
         ZhengFang zf = new ZhengFang();
         zf.setStuId("150104010145");
         zf.setStuPwd("xxxxx00000qq");
@@ -332,7 +376,10 @@ public class ZhengFangUtil<main> {
         zfu.getCookieAnd__VIEWSTATE();
         zfu.getCheckCode();
         zfu.login();
-        zfu.getPersonalDetails();
+        zfu.getDefaultExamInfo();
+        zfu.getExamInfo("2016-2017","1");
+        /*zfu.getDefaultPersonalClassSchedule();
+        zfu.getPersonalClassSchedule("2016-2017", "1");*/
         zfu.printf();
     }
 }

@@ -7,18 +7,22 @@ public class Campus implements Serializable {
     private String campusName;
     private String campusCode;
     private String province;
-    private int officialSystemId;
+    private int educationSystemId;
+    private int officialSiteId;
+    private String educationSystemAddress;
 
     public Campus() {
         super();
     }
 
-    public Campus(int id, String campusName, String campusCode, String province, int officialSystemId) {
+    public Campus(int id, String campusName, String campusCode, String province, int educationSystemId, int officialSiteId, String educationSystemAddress) {
         this.id = id;
         this.campusName = campusName;
         this.campusCode = campusCode;
         this.province = province;
-        this.officialSystemId = officialSystemId;
+        this.educationSystemId = educationSystemId;
+        this.officialSiteId = officialSiteId;
+        this.educationSystemAddress = educationSystemAddress;
     }
 
     public int getId() {
@@ -53,22 +57,40 @@ public class Campus implements Serializable {
         this.province = province;
     }
 
-    public int getOfficialSystemId() {
-        return officialSystemId;
+    public int getEducationSystemId() {
+        return educationSystemId;
     }
 
-    public void setOfficialSystemId(int officialSystemId) {
-        this.officialSystemId = officialSystemId;
+    public void setEducationSystemId(int educationSystemId) {
+        this.educationSystemId = educationSystemId;
+    }
+
+    public int getOfficialSiteId() {
+        return officialSiteId;
+    }
+
+    public void setOfficialSiteId(int officialSiteId) {
+        this.officialSiteId = officialSiteId;
+    }
+
+    public String getEducationSystemAddress() {
+        return educationSystemAddress;
+    }
+
+    public void setEducationSystemAddress(String educationSystemAddress) {
+        this.educationSystemAddress = educationSystemAddress;
     }
 
     @Override
     public String toString() {
-        return "campus{" +
+        return "Campus{" +
                 "id=" + id +
                 ", campusName='" + campusName + '\'' +
                 ", campusCode='" + campusCode + '\'' +
                 ", province='" + province + '\'' +
-                ", officialSystemId=" + officialSystemId +
+                ", educationSystemId=" + educationSystemId +
+                ", officialSiteId=" + officialSiteId +
+                ", educationSystemAddress='" + educationSystemAddress + '\'' +
                 '}';
     }
 }

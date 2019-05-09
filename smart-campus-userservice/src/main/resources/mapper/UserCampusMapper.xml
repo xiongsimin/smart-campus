@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.graduation.design.smartcampususerservice.dao.UserCampusDao">
+    <insert id="addUserCampus" parameterType="UserCampus" keyProperty="id"
+            useGeneratedKeys="true">
+        INSERT INTO user_campus(user_id,campus_id,campus_card_number,campus_card_password)VALUES(#{userId},#{campusId},#{campusCardNumber},#{campusCardPassword})
+    </insert>
+    <select id="findUserCampusByUserId" parameterType="User" resultType="UserCampus">
+        SELECT * FROM user_campus WHERE user_id=#{id}
+    </select>
+    <update id="updateUserCampus" parameterType="UserCampus">
+        UPDATE user_campus SET campus_id=#{campusId} WHERE id=#{id}
+    </update>
+    <update id="setAcademy" parameterType="UserCampus">
+        UPDATE user_campus SET academy=#{academy} WHERE user_id=#{userId}
+    </update>
+    <update id="setMajor" parameterType="UserCampus">
+        UPDATE user_campus SET major=#{major} WHERE user_id=#{userId}
+    </update>
+    <update id="setDegree" parameterType="UserCampus">
+        UPDATE user_campus SET degree=#{degree} WHERE user_id=#{userId}
+    </update>
+    <update id="setAttendCampusTime" parameterType="UserCampus">
+        UPDATE user_campus SET attend_campus_time=#{attendCampusTime} WHERE user_id=#{userId}
+     </update>
+</mapper>
