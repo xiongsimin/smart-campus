@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.graduation.design.smartcmapusadminservice.dao.TopicReplyDao">
+    <insert id="addTopicReply" parameterType="TopicReply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO topic_reply(reply_content,topic_id,is_sub_reply,reply_id,user_id,accusation_volume)VALUES (#{replyContent},#{topicId},#{isSubReply},#{replyId},#{userId},0)
+    </insert>
+    <delete id="delTopicReplyById" parameterType="int">
+        DELETE FROM topic_reply WHERE id=#{id} OR reply_id=#{id}
+    </delete>
+    <delete id="delTopicReplyByTopicId" parameterType="int">
+        DELETE FROM topic_reply WHERE topic_id=#{topicId}
+    </delete>
+    <!--<select id="findTopicReplyById" parameterType="int" resultType="TopicReply">
+        SELECT * FROM topic_reply WHERE id=#{id}
+    </select>-->
+    <select id="findTopicReplyByTopicId" parameterType="int" resultMap="topicReplyMap">
+      SELECT * FROM topic_reply WHERE topic_id=#{topicId}
+    </select>
+    <resultMap id="topicReplyMap" type="TopicReply">
+        <id property="id" column="id"/>
+        <result property="replayContent" column="replay_content"/>
+        <result property="topicId" column="topic_id"/>
+        <result property="isSubReply" column="is_sub_reply"/>
+        <result property="replyId" column="reply_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="accusationVolume" column="accusation_volume"/>
+        <association property="subTopicReplyList" column="id"
+                     select="com.graduation.design.smartcmapusadminservice.dao.TopicReplyDao.findSubTopicReplyById"
+                     javaType="TopicReply"/>
+    </resultMap>
+    <select id="findSubTopicReplyById" parameterType="int" resultType="TopicReply">
+        SELECT * FROM topic_reply WHERE topic_id=#{id}
+    </select>
+    <select id="findAccusedTopicReply" resultType="TopicReply">
+        SELECT * FROM topic_reply WHERE accusation_volume>5
+    </select>
+</mapper>

@@ -10,6 +10,7 @@ public class Campus implements Serializable {
     private int educationSystemId;
     private int officialSiteId;
     private String educationSystemAddress;
+    private EducationSystem educationSystem;
 
     public Campus() {
         super();
@@ -23,6 +24,17 @@ public class Campus implements Serializable {
         this.educationSystemId = educationSystemId;
         this.officialSiteId = officialSiteId;
         this.educationSystemAddress = educationSystemAddress;
+    }
+
+    public Campus(int id, String campusName, String campusCode, String province, int educationSystemId, int officialSiteId, String educationSystemAddress, EducationSystem educationSystem) {
+        this.id = id;
+        this.campusName = campusName;
+        this.campusCode = campusCode;
+        this.province = province;
+        this.educationSystemId = educationSystemId;
+        this.officialSiteId = officialSiteId;
+        this.educationSystemAddress = educationSystemAddress;
+        this.educationSystem = educationSystem;
     }
 
     public int getId() {
@@ -81,6 +93,14 @@ public class Campus implements Serializable {
         this.educationSystemAddress = educationSystemAddress;
     }
 
+    public EducationSystem getEducationSystem() {
+        return educationSystem;
+    }
+
+    public void setEducationSystem(EducationSystem educationSystem) {
+        this.educationSystem = educationSystem;
+    }
+
     @Override
     public String toString() {
         return "Campus{" +
@@ -91,6 +111,7 @@ public class Campus implements Serializable {
                 ", educationSystemId=" + educationSystemId +
                 ", officialSiteId=" + officialSiteId +
                 ", educationSystemAddress='" + educationSystemAddress + '\'' +
+                ", educationSystem=" + educationSystem +
                 '}';
     }
 }

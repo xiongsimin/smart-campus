@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Document</title>
+    <link rel="stylesheet" href="/plugin/DataTables-1.10.16/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/plugin/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="/plugin/layer/layer.js"></script>
+    <style>
+        #top {
+            width: 100%;
+            height: 50px;;
+            /* background-color: rgb(163, 250, 76); */
+            border-bottom: 1px solid #CCC;
+            padding-top: 0.6%;
+        }
+
+        #new-campus {
+            float: left;
+            margin-left: 20px;
+        }
+
+        #top select {
+            width: 100px;
+            float: left;
+            margin-left: 20px;
+        }
+
+        .small-icon {
+            width: 15px;
+            height: 15px;
+        }
+
+        #refresh {
+            width: 45px;
+            height: 38px;
+            float: right;
+            margin-right: 50px;
+            border: none;
+            background-color: white;
+        }
+
+        #refresh img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="top">
+    <button id="new-campus" class="btn btn-primary">添加学校</button>
+    <button id="refresh">
+        <a href="">
+            <img src="/imgs/refresh.png" alt=""/>
+        </a>
+    </button>
+</div>
+<div style="width: 90%;text-align: center;margin-left: 5%;margin-top: 3%;">
+    <table id="myTable" class="display">
+        <thead>
+        <tr>
+            <th>学校编号</th>
+            <th>学校名</th>
+            <th>教务系统</th>
+            <th>教务系统ip地址</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="campus:${campusList}">
+            <td th:text="${campus.id}">1</td>
+            <td th:text="${campus.campusName}">燕山大学</td>
+            <td th:text="${campus.educationSystem!=null?campus.educationSystem.educationSystemName:''}">正方教务系统</td>
+            <td th:text="${campus.educationSystemAddress}">http://202.206.243.3</td>
+            <td>
+                <a><img th:id="${campus.id}" th:name="${campus.campusName}" class='edit small-icon'
+                        src='/imgs/edit.png'/></a>
+                <img th:id="${campus.id}" th:name="${campus.campusName}" class='delete small-icon'
+                     src='/imgs/delete.png'/>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
+        //弹出一个iframe层
+        $('#new-campus').on('click', function () {
+            layer.open({
+                type: 2,
+                title: '添加学校',
+                maxmin: true,
+                shadeClose: false, //点击遮罩关闭层
+                area: ['500px', '350px'],
+                content: '/addCampusPage',
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+        $('.edit').on('click', function () {
+            var id = $(this).attr("id");
+            // var campusName = $(this).attr("name");
+            layer.open({
+                type: 2,
+                title: '编辑学校信息',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['500px', '350px'],
+                content: '/editCampusPage?id=' + id,
+                end: function () {
+                    location.reload();
+                }
+            });
+        });
+        $('.delete').on('click', function () {
+            var id = $(this).attr("id");
+            var campusName = $(this).attr("name");
+            $.ajax({
+                type: 'delete',
+                url:"/campus/"+id,
+                success: function (result) {
+                    if (result=="true") {
+                        alert("删除【" + campusName + "】成功！");
+                        location.reload();
+                    } else {
+                        alert("删除【" + campusName + "】失败！" );
+                    }
+                },
+                error: function () {
+                    alert("请求失败！")
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

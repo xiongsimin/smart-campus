@@ -499,6 +499,9 @@ public class UserController {
                     fos.close();
                     rs.setSuccess(true);
                     rs.setMsg("上传头像成功！");
+                    //更新服务器数据库中用户头像路径
+                    user.setUserImagePath("1" + imgSuffix);
+                    userService.setUserImagePath(user);
                 } catch (IOException e) {
                     e.printStackTrace();
                     rs.setSuccess(false);

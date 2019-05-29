@@ -26,4 +26,7 @@
     <update id="setSex" parameterType="User">
         UPDATE `user` SET sex=#{sex} WHERE email=#{email}
     </update>
+    <update id="setUserImagePath" parameterType="User">
+        UPDATE `user` SET user_image_path=#{userImagePath} WHERE email=#{email}
+    </update>
 </mapper>

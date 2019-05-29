@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.graduation.design.smartcampususerservice.dao.EducationSystemDao">
+    <select id="findEducationSystemById" parameterType="int" resultType="EducationSystem">
+        SELECT * FROM education_system WHERE id=#{id}
+    </select>
+    <select id="getAllEducationSystem" resultType="EducationSystem">
+        SELECT * FROM education_system
+    </select>
+    <update id="editEducationSystem" parameterType="EducationSystem">
+        UPDATE education_system SET education_system_name=#{educationSystemName},microservice_name=#{microserviceName} WHERE id=#{id}
+    </update>
+    <delete id="delEducationSystem">
+        DELETE FROM education_system WHERE id=#{id}
+    </delete>
+    <insert id="addEducationSystem" parameterType="EducationSystem" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO education_system(education_system_name,microservice_name)VALUES (#{educationSystemName},#{microserviceName})
+    </insert>
+</mapper>

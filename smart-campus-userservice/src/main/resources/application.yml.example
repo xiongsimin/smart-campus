@@ -4,7 +4,7 @@ eureka:
   instance:
     prefer-ip-address: true
   client:
-    service-url:
+    com.graduation.design.smartcmapusadminservice.service-url:
       defaultZone: http://localhost:8761/eureka/
 spring:
   application:
@@ -20,6 +20,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-  typeAliasesPackage: com.graduation.design.smartcampususerservice.entity
+  typeAliasesPackage: com.graduation.design.smartcampususerservice.com.graduation.design.smartcmapusadminservice.entity
   configuration:
     mapUnderscoreToCamelCase: true

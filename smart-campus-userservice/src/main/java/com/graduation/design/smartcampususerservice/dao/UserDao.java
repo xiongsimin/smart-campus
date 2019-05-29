@@ -61,4 +61,10 @@ public interface UserDao {
      * @return
      */
     int setSex(User user);
+    /**
+     * 更新服务器数据库中用户头像路径
+     * @param user
+     * @return
+     */
+    int setUserImagePath(User user);
 }

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <link rel="stylesheet" href="../../static/plugin/DataTables-1.10.16/css/jquery.dataTables.css"/>
+    <script src="../../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../../static/plugin/DataTables-1.10.16/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="../../static/plugin/layer/layer.js"></script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Document</title>
+    <script src="../../static/js/jquery-3.3.1.min.js"></script>
+    <style>
+        .bg_pic {
+            opacity: 0.4;
+            width: 100%;
+            height: 618px;
+        }
+
+        .main {
+            position: absolute;
+            left: 800px;
+            top: 180px;
+            height: 200px;
+            width: 280px;
+            background-color: white;
+            padding-left: 40px;
+            padding-top: 50px;
+            box-shadow: 5px 10px 5px #CCC;
+            border-radius: 5px;
+        }
+
+        /* .main img{
+    width:25px;
+    height:25px;
+    padding-top:5px;
+} */
+
+        .main div {
+            float: left;
+        }
+
+        .main button {
+            cursor: pointer;
+        }
+
+        .user_psw {
+            width: 200px;
+            height: 30px;
+        }
+
+        .mid {
+            width: 98.8%;
+            height: 320px;
+            position: absolute;
+            top: 150px;
+            background-color: gray;
+            opacity: 0.5;
+        }
+
+        .title {
+            position: absolute;
+            left: 200px;
+            top: 230px;
+            z-index: 2;
+            font-size: 50px;
+            color: white;
+            text-shadow: 5px 5px 5px #CCC;
+            /* font-family:; */
+        }
+
+        .title span {
+            font-size: 19px;
+            color: white;
+        }
+
+
+
+
+        .right {
+            width: 84.6%;
+            height: 546px;
+            float: left;
+        }
+
+        .right_body {
+            padding-left: 60px;
+            margin-top: 30px;
+        }
+
+        .ifr {
+            overflow: hidden;
+
+            width: 100%;
+            height: 100%;
+        }
+
+        .head_inline {
+            display: inline;
+        }
+
+        .big_art_font {
+            font-size: 35px;
+            font-family: YouYuan;
+            line-height: 80px;
+            float: left;
+            padding-left: 50px;
+            text-shadow: 5px 5px 5px rgb(15, 4, 4);
+            color: white;
+        }
+
+        .info {
+            padding-top: 50px;
+            float: right;
+            font-size: 12px;
+            margin-right: 100px;
+            color: white;
+        }
+
+        .info span {
+            color: rgb(229, 231, 91);
+        }
+
+        .info div {
+            display: inline;
+        }
+
+        .info div img {
+            width: 15px;
+            height: 15px;
+        }
+
+        .logout {
+            float: right;
+            margin-right: 10px;
+            margin-top: 10px;
+            background-color: rgb(69, 48, 161);
+            color: white;
+            border-radius: 5px;
+        }
+
+        .logout:hover {
+            cursor: pointer;
+        }
+
+        .logout div {
+            float: left;
+        }
+
+        .logout div img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .u {
+            margin-top: 20px;
+            color: white;
+        }
+
+        .u:hover {
+            cursor: pointer;
+        }
+
+        .u ul {
+            width: 100%;
+            padding-left: 0px;
+            margin-top: 30px;
+        }
+
+        .u ul a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .u ul li {
+            list-style-type: none;
+        }
+
+        .u ul li div {
+            float: left;
+        }
+
+        .u ul li div img {
+            width: 25px;
+            height: 25px;
+            padding-left: 35px;
+        }
+
+        .strong {
+            font-size: 20px;
+            /* background:linear-gradient(rgb(161, 169, 173),rgb(121, 125, 138)); */
+        }
+
+        .strong:hover {
+            font-size: 20px;
+            background: linear-gradient(rgb(178, 214, 231), rgb(100, 130, 228));
+        }
+
+        .weak {
+            padding-left: 70px;
+            margin-top: 5px;
+            line-height: 25px;
+            display: block;
+        }
+
+        .weak:hover {
+            font-size: 20px;
+            background: linear-gradient(rgb(207, 220, 226), rgb(137, 149, 185));
+        }
+
+        .guiding {
+            margin-left: 10px;
+            margin-top: 4px;
+            padding-left: 5px;
+            width: 98%;
+            font-size: 10px;
+            line-height: 25px;
+            border-bottom: 1px solid gray;;
+            /* background-color:aquamarine; */
+        }
+
+        .guiding div {
+            float: left;
+        }
+
+        .guiding div img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .but_blue {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 60px;
+            height: 30px;
+        }
+
+        .but_orange {
+            background-color: orange;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 60px;
+            height: 30px;
+        }
+
+        .but_green {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 60px;
+            height: 30px;
+        }
+
+        .but_red {
+            background-color: rgb(233, 49, 17);
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 60px;
+            height: 30px;
+        }
+
+        .but_green:hover {
+            cursor: pointer;
+        }
+
+        .but_orange:hover {
+            cursor: pointer;
+        }
+
+        .but_blue:hover {
+            cursor: pointer;
+        }
+
+        .but_red:hover {
+            cursor: pointer;
+        }
+
+        .gen_input {
+            width: 300px;
+            height: 30px;
+            border-radius: 4px;
+            border-color: black;
+        }
+
+        .gen_input:focus {
+            border-color: red;
+        }
+
+        .gen_table {
+            font-family: verdana, arial, sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+            width: 90%;
+            text-align: center;
+        }
+
+        .gen_table th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
+
+        .gen_table td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+<script src="/js/my.js"></script>
+<img class="bg_pic" src="/imgs/login_back.jpg"/>
+<div class="title">智慧校园App管理员后台
+    <br/>
+    <span>Smart Campus App Administrator System</span>
+</div>
+<form id="sub" action="/doLogin" method="post">
+    <div class="mid"></div>
+    <div class="main">
+        <!-- <div><img src="../static/imgs/medicine_store.png"></div> -->
+        <div>
+            <img src="/imgs/admin.png"/>
+        </div>&nbsp;&nbsp;
+        <input class="user_psw" type="text" placeholder="请输入账号" name="account" id="account"/>
+        <br/>
+        <br/>
+        <div>
+            <img src="/imgs/password.png"/>
+        </div>&nbsp;&nbsp;
+        <input class="user_psw" type="password" placeholder="请输入密码" name="password" id="password"/>
+        <br/>
+        <br/>
+        <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="login" type="submit" onclick="login();" class="but_green" value="登陆"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input class="but_orange" type="reset" value="重置"/>
+        <br/>
+        <div th:text="${msg}" style="color:red;"></div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
+        //弹出一个iframe层
+        $('.register').on('click', function () {
+            var id = $(this).attr("id");
+            layer.open({
+                type: 2,
+                title: '标题',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['1000px', '550px'],
+                content: 'register.jsp',
+                end: function () {
+                    location.reload();
+                }
+
+            });
+        });
+
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>hello</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/plugin/layer/layer.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/plugin/jquery.rotate-0.3.0/jquery.rotate.js"></script>
+    <script src="/js/indexInit.js"></script>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        #head {
+            background-color: rgb(12, 14, 13);
+            /* height: 50px; */
+            color: white;
+        }
+
+        #head_left {
+            float: left;
+            width: 50%;
+            padding-left: 3%;
+        }
+
+        #head_right {
+            float: right;
+            width: 50%;
+        }
+
+        #character {
+            float: right;
+            margin-right: 5%;
+        }
+
+        #msg_block {
+            float: right;
+            margin-right: 5%;
+        }
+
+        #main {
+            /* height:600px; */
+            background-color: blanchedalmond;
+        }
+
+        #left {
+            float: left;
+            width: 200px;
+            /* padding-top: 3%; */
+            /* height: 600px; */
+            background-color: rgb(230, 230, 230);
+            border-right: solid 1px rgb(204, 204, 204);
+        }
+
+        #left dl {
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        #left dl dt,
+        dd {
+            /* border-top: 0.5px solid #CCC; */
+            border-bottom: 0.5px solid #CCC;
+
+        }
+
+        #left dl dt {
+            padding-left: 10%;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+        #left dl dd {
+            padding-left: 8%;
+            margin-bottom: 0;
+        }
+
+        #left dl dt img {
+            width: 8%;
+            height: 8%;
+        }
+
+        #left dl dd img {
+            width: 15%;
+            height: 15%;
+            padding: 0;
+        }
+
+        #left dl dt span {
+            margin-left: 10%;
+            margin-right: 20%;
+        }
+
+        /* #left dl dd span {
+            margin-left: 10%;
+            margin-right: 20%;
+        } */
+
+        #left dl:hover {
+            cursor: pointer;
+        }
+
+        /* #left dl dt:hover {
+            /* background-color: rgb(216, 49, 27); */
+
+        /* color: steelblue;
+        } */
+
+        #left dl dd:hover {
+            background-color: rgb(255, 255, 255);
+            color: steelblue;
+        }
+
+        .menu_switch {
+            float: right;
+            margin-right: 10%;
+        }
+
+        /* .rotate_pic{
+            transform:rotate(7deg);
+        } */
+
+        #right {
+            float: left;
+            /* width: 85%; */
+            /* height: 600px; */
+            /* background-color: rgb(80, 61, 150); */
+        }
+
+        #bars {
+            /* width: 100%; */
+            /* height: 30px; */
+            background-color: rgb(230, 230, 230);
+        }
+
+        #bars ul {
+            margin: 0;
+        }
+
+        #bars ul li {
+            float: left;
+            text-align: center;
+            list-style: none;
+            padding-left: 6px;
+            padding-right: 6px;
+            margin-right: 5px;
+            background-color: rgb(167, 165, 161);
+        }
+
+        #bars ul :hover {
+            cursor: pointer;
+        }
+
+        #bars ul li img {
+            width: 8px;
+            height: 8px;
+            margin-left: 5px;
+        }
+
+        /*#bars ul li img:hover {
+            src: url(/imgs/hover_close.png);
+        }*/
+
+        /* #bars em {
+            width: 5px;
+            
+            float: left;
+        } */
+
+        #ifrs iframe {
+            border: none;
+            height: 100%;
+            width: 100%;
+            /* background-color: darkgrey; */
+        }
+
+        .live {
+            background-color: aquamarine !important;
+        }
+    </style>
+</head>
+
+<body onResize="changeSize()">
+<div id="head">
+    <div id="head_left">智慧校园App管理员后台</div>
+    <div id="head_right">
+        <div id="msg_block">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                        <!-- <%
+                        Admin admin0 = (Admin)session.getAttribute("admin");
+                       String a0 = admin0.getName();
+                       out.println(a0);
+                    %> -->
+                        熊思敏
+
+                        <!-- <b class="caret"></b> -->
+                    </a>
+                    <ul class="dropdown-menu" style="position:absolute">
+                        <li>
+                            <a href="#" id="base_msg">基本资料</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/quite">登出</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="character">
+            管理员
+        </div>
+
+    </div>
+</div>
+<div id="mian">
+    <div id="left">
+        <!-- <%
+               Admin admin1 = (Admin)session.getAttribute("admin");
+               String a1 = admin1.getAuthority();
+            if(a1.equals("0")){
+        %> -->
+        <dl>
+            <dt>
+                <img src="/imgs/study.png"/>
+                <span>学习管理</span>
+                <img rotate="0" class="menu_switch" src="/imgs/spread_fold.png" title="展开"/>
+            </dt>
+            <!-- <dd onclick="bars_new('会员管理',1,'测试');">会员管理</dd> -->
+            <dd style="display:none;" onclick="bars_new('学校管理',3,'/campus');">
+                <img src="/imgs/dashed.png"/>
+                <span>学校管理</span>
+            </dd>
+            <dd style="display:none;" onclick="bars_new('教务系统管理',4,'/educationSystem');">
+                <img src="/imgs/dashed.png"/>
+                <span>教务系统管理</span>
+            </dd>
+        </dl>
+        <!-- <%
+            }
+        %>   -->
+        <dl>
+            <dt>
+                <img src="/imgs/life.png"/>
+                <span>生活管理</span>
+                <img rotate="0" class="menu_switch" src="/imgs/spread_fold.png" title="展开"/>
+            </dt>
+            <!-- <%
+               Admin admin2 = (Admin)session.getAttribute("admin");
+               String a2 = admin2.getAuthority();
+            if(a2.equals("0")){
+           %> -->
+            <dd style="display:none;" onclick="bars_new('兴趣版块管理',5,'/columnPage');">
+                <img src="/imgs/dashed.png"/>
+                <span>兴趣版块管理</span>
+            </dd>
+            <!-- <%
+             } else{
+            %>   -->
+            <dd style="display:none;" onclick="bars_new('闲置物品平台管理',6,'../medicine/trandermedicine.jsp');">
+                <img src="/imgs/dashed.png"/>
+                <span>闲置物品平台管理</span>
+            </dd>
+            <dd style="display:none;" onclick="bars_new('封号/解封管理',7,'../medicine/trandermedicine.jsp');">
+                <img src="/imgs/dashed.png"/>
+                <span>封号/解封管理</span>
+            </dd>
+            <dd style="display:none;" onclick="bars_new('实名认证管理',8,'../medicine/trandermedicine.jsp');">
+                <img src="/imgs/dashed.png"/>
+                <span>实名认证管理</span>
+            </dd>
+            <!-- <%
+             }
+            %> -->
+            <dd style="display:none;" onclick="bars_new('发言管理',9,'../medicine/date.jsp');">
+                <img src="/imgs/dashed.png"/>
+                <span>发言管理</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                <img src="/imgs/system.png"/>
+                <span>系统管理</span>
+                <img rotate="0" class="menu_switch" src="/imgs/spread_fold.png" title="展开"/>
+            </dt>
+
+            <dd style="display:none;" onclick="bars_new('系统公告管理',10,'../market/batch.jsp');">
+                <img src="/imgs/dashed.png"/>
+                <span>系统公告管理</span>
+            </dd>
+        </dl>
+    </div>
+    <div id="right">
+        <div id="bars">
+            <ul>
+                <li bar-id="0" onclick="to_index();" class="live">首页</li>
+                <!-- <li>会员管理
+                    <img src="imgs/close.png" onclick="bars_del(id);javascript:$(this).parent().remove();" alt="">
+                </li>
+                <li>连锁店管理
+                    <img src="imgs/close.png" onclick="bars_del(id);javascript:$(this).parent().remove();" alt="">
+                </li>
+                <li>药品管理
+                    <img src="imgs/close.png" onclick="bars_del(id);javascript:$(this).parent().remove();" alt="">
+                </li> -->
+            </ul>
+        </div>
+        <div id="ifrs">
+            <iframe src="/welcome" bar-id="0">
+
+            </iframe>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#base_msg").on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['400px', '300px'],
+            shadeClose: false,
+            content: '../information/checkInfo.jsp'
+        });
+    });
+</script>
+</body>
+
+</html>

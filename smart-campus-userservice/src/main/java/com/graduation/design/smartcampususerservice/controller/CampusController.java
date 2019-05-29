@@ -19,12 +19,30 @@ public class CampusController {
 
     @PostMapping("/campus")
     public Result addCampus(Result rs, @RequestBody Campus campus) {
+        System.out.println(campus);
         if (this.campusService.addCampus(campus) == 1) {
             rs.setSuccess(true);
             rs.setMsg("新增成功！");
         } else {
             rs.setSuccess(false);
             rs.setMsg("新增失败！");
+        }
+        return rs;
+    }
+
+    @PostMapping("/editCampus")
+    public Result editCampus(Result rs, @RequestBody Campus campus) {
+        if(this.campusService.findCampusById(campus.getId())!=null){
+            if(this.campusService.editCampusDetail(campus)==1){
+                rs.setSuccess(true);
+                rs.setMsg("修改成功！");
+            }else {
+                rs.setSuccess(false);
+                rs.setMsg("修改失败！");
+            }
+        }else {
+            rs.setSuccess(false);
+            rs.setMsg("修改失败！学校信息不能为空！");
         }
         return rs;
     }
@@ -36,10 +54,10 @@ public class CampusController {
      * @param rs
      * @return
      */
-    @DeleteMapping("/campus")
-    public Result delCampusById(int id, Result rs) {
-        if (this.campusService.findCampusById(id) != null) {
-            if (this.campusService.delCampusById(id) == 1) {
+    @GetMapping("/delCampus")
+    public Result delCampusById(@RequestParam("id") String id, Result rs) {
+        if (this.campusService.findCampusById(Integer.parseInt(id)) != null) {
+            if (this.campusService.delCampusById(Integer.parseInt(id)) == 1) {
                 rs.setSuccess(true);
                 rs.setMsg("删除成功！");
             } else {
@@ -90,7 +108,8 @@ public class CampusController {
         return rs;
     }
 
-    public Result findCampusById(int id, Result rs) {
+    @GetMapping("/findCampusById")
+    public Result findCampusById(@RequestParam("id") int id, Result rs) {
         Campus campus = this.campusService.findCampusById(id);
         if (campus != null) {
             rs.setSuccess(true);

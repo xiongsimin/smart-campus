@@ -1,0 +1,35 @@
+server:
+  port: 8050
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: smart-campus-adminservice
+  http:
+    multipart:
+      max-file-size: 50Mb
+      max-request-size: 100Mb
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    content-type: text/html
+  freemarker:
+    charset: UTF-8
+  #  devtools:
+  #    restart:
+  #      enabled: true
+  #      additional-paths: src/main/java
+  datasource:
+    url: jdbc:mysql://localhost:3307/smart_campus?serverTimezone=PRC
+    username: root
+    password: aries.kim.database
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  typeAliasesPackage: com.graduation.design.smartcmapusadminservice.entity
+  configuration:
+    mapUnderscoreToCamelCase: true

@@ -8,14 +8,14 @@
     <delete id="delCampusById" parameterType="int">
         DELETE FROM campus WHERE id=#{id}
     </delete>
-    <select id="findCampusById" parameterType="int" resultType="Campus">
+    <select id="findCampusById" parameterType="int" resultMap="campusMap">
         SELECT * FROM campus WHERE id=#{id}
     </select>
     <select id="findCampusByCampusName" parameterType="String" resultType="Campus">
         SELECT * FROM campus WHERE campus_name=#{campusName}
     </select>
     <update id="editCampusDetail" parameterType="Campus">
-        UPDATE campus SET campus_name=#{campusName},campus_code=#{campusCode},province=#{province} WHERE id=#{id}
+        UPDATE campus SET campus_name=#{campusName},campus_code=#{campusCode},province=#{province},education_system_id=#{educationSystemId},education_system_address=#{educationSystemAddress} WHERE id=#{id}
     </update>
     <update id="editCampusEducationSystemAddress">
         UPDATE campus SET education_system_address=#{educationSystemAddress} WHERE id=#{id}
@@ -23,7 +23,19 @@
     <update id="editCampusEducationSystemId">
         UPDATE campus SET education_system_id=#{educationSystemId} WHERE id=#{id}
     </update>
-    <select id="getAllCampus" resultType="Campus">
+    <select id="getAllCampus" resultMap="campusMap">
         SELECT * FROM campus
     </select>
+    <resultMap id="campusMap" type="Campus">
+        <id property="id" column="id"/>
+        <result property="campusName" column="campus_name"/>
+        <result property="campusCode" column="campus_code"/>
+        <result property="province" column="province"/>
+        <result property="educationSystemId" column="education_systemId"/>
+        <result property="officialSiteId" column="official_site_id"/>
+        <result property="educationSystemAddress" column="education_system_address"/>
+        <association property="educationSystem" column="education_system_id"
+                     select="com.graduation.design.smartcampususerservice.dao.EducationSystemDao.findEducationSystemById"
+                     javaType="EducationSystem"/>
+    </resultMap>
 </mapper>

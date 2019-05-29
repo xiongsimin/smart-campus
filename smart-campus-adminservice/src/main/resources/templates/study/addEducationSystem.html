@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css"/>
+    <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Insert title here</title>
+</head>
+<body>
+<br/>
+<form action="/addEducationSystem" method="post">
+    <table align="center">
+        <tr>
+            <td>教务系统名称:</td>
+            <td>
+                <input type="text" name="educationSystemName" size="20" class="form-control"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>教务系统微服务：</td>
+            <td><input type="text" name="microserviceName" size="20" class="form-control"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <!-- <td>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;</td> -->
+            <td colspan="2" style="text-align: center"><input type="submit" style="width: 100%;" value="提交"
+                                                              class="btn btn-primary"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -107,6 +107,11 @@ public class UserServiceImp implements UserService {
         return userDao.setSex(user);
     }
 
+    @Override
+    public int setUserImagePath(User user) {
+        return userDao.setUserImagePath(user);
+    }
+
 //    @Override
 //    public int clearCheckCode(String email) {
 //        return this.userDao.clearCheckCode(email);

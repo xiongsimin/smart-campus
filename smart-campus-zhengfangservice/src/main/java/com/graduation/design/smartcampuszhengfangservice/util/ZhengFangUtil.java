@@ -38,6 +38,30 @@ public class ZhengFangUtil {
     private Document personalGrade;//成绩（按学期查）
     private Document examInfo;//考试信息
 
+    public Map<String, String> getCookie() {
+        return Cookie;
+    }
+
+    public Document getPersonalClassSchedule() {
+        return personalClassSchedule;
+    }
+
+    public String get__VIEWSTATE() {
+        return __VIEWSTATE;
+    }
+
+    public String get__VIEWSTATE1() {
+        return __VIEWSTATE1;
+    }
+
+    public String get__VIEWSTATE2() {
+        return __VIEWSTATE2;
+    }
+
+    public String get__VIEWSTATE3() {
+        return __VIEWSTATE3;
+    }
+
     /**
      * 初始化
      *
@@ -94,15 +118,18 @@ public class ZhengFangUtil {
      *
      * @return
      */
-    public boolean getCheckCode() {
+    public boolean getCheckCode(int userId) {
         String subUrl = "/CheckCode.aspx?";
         Connection connection = Jsoup.connect(this.url + subUrl);
         try {
             Connection.Response response = connection.cookies(this.Cookie).method(Connection.Method.GET).ignoreContentType(true).timeout(this.timeout).execute();
             this.checkCodeBytes = response.bodyAsBytes();
-            /*h1 此处为测试用，最后应删除*/
-            File img = new File("D://temp//yan.gif");
-            if (!img.exists()) {
+            File imgDir = new File("D:\\nginx-1.15.8\\html\\smart_campus\\check_code\\" + userId);
+            if (!imgDir.exists()) {//文件夹不存在
+                imgDir.mkdir();
+            }
+            File img = new File("D:\\nginx-1.15.8\\html\\smart_campus\\check_code\\" + userId + "\\" + "1.gif");
+            if (!img.exists()) {//文件不存在
                 img.createNewFile();
             } else {
                 img.delete();
@@ -114,7 +141,6 @@ public class ZhengFangUtil {
             bos.flush();
             bos.close();
             fos.close();
-            /*h1 此处为测试用，最后应删除*/
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -313,8 +339,9 @@ public class ZhengFangUtil {
             return false;
         }
     }
+
     //http://202.206.243.3/xskscx.aspx?xh=150104010145&xm=%D0%DC%CB%BC%C3%F4&gnmkdm=N121604
-    public boolean getExamInfo(String xnd,String xqd){
+    public boolean getExamInfo(String xnd, String xqd) {
         String subUrl = "/xskscx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121604";
         String Referer = this.url + "/xskscx.aspx?xh=" + this.stuId + "&xm=" + this.stuName + "&gnmkdm=N121604";
         Map<String, String> data = new HashMap<>();
@@ -374,10 +401,10 @@ public class ZhengFangUtil {
         ZhengFangUtil zfu = new ZhengFangUtil();
         zfu.init(zf);
         zfu.getCookieAnd__VIEWSTATE();
-        zfu.getCheckCode();
+        zfu.getCheckCode(1);
         zfu.login();
         zfu.getDefaultExamInfo();
-        zfu.getExamInfo("2016-2017","1");
+        zfu.getExamInfo("2016-2017", "1");
         /*zfu.getDefaultPersonalClassSchedule();
         zfu.getPersonalClassSchedule("2016-2017", "1");*/
         zfu.printf();
